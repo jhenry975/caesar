@@ -15,10 +15,46 @@
 # limitations under the License.
 #
 import webapp2
+from caesar import encrypt
+import cgi
+#from caesar import alphabet_position
+
+form="""
+<form method="post">
+    <div>
+        <label> Rotate by:
+            <input type="char" name="rot">
+        </label>
+    </div>
+    <br>
+    <textarea type="letter" name="textbox">
+    </textarea>
+    <br>
+    <br>
+    <input type="submit">
+    </input>
+</form>
+"""
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world!')
+        self.response.out.write(form)
+
+    def post(self):
+
+        rotateBy = self.request.get("rot")
+        text = self.request.get("textbox")
+
+        # position = alphabet_position
+
+        text = cgi.escape(text)
+        rotateBy = int(rotateBy)
+        text = str(text)
+        encrypt_text = encrypt(text, rotateBy)
+
+
+
+        self.response.out.write(encrypt_text)
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
